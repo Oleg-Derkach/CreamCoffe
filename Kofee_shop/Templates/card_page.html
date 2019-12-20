@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main_wraper_card">
+  <div class="pictures_card">
+    {% for image in product_images %}
+    <div class="img__field">
+      <img src="{{ image.image.url }}" class="img-fluid" alt="">
+    </div>
+    {% endfor %}
+  </div>
+  <div class="card_description">
+    <p class="lead font-weight-bold">{{ product_item.title }}</p>
+    <a href="">
+      <span class="">{{ product_item.category.category_name }}</span>
+    </a>
+    <p class="lead">
+      {% if product_item.discount_price %}
+      <span class="mr-1">
+        <del>{{ product_item.price }} Грн / Кг </del>
+      </span>
+      <span>{{ product_item.discount_price }} Грн / Кг </span>
+      {% else %}
+      <span>{{ product_item.price }} Грн / Кг </span>
+      {% endif %}
+    </p>
+    <p class="lead font-weight-bold">Описание</p>
+    <p>{{ product_item.description }}</p>
+      <a href="{{ product_item.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p">
+        Купить
+      </a>
+  </div>
+</div>
+
+{% endblock content %}

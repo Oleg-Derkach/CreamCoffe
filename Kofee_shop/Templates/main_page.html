@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main class="main">
+
+		<div class="tab-wrap">
+			<div class="filter">
+				<div class="filter-sidebar">
+					<button class="toggle-filter">
+						<span class="icon-sliders"></span>
+						<span class="sr-only">Filters</span>
+					</button>
+					<span class="filter__title">{{ search_bar.qs.count }} items found</span>
+				</div>
+				<div class="filter-content">
+					<span class="filter__title">Сортировать</span>
+					<form class="sort" method="GET" action=".">
+
+						<input type="radio" id="sort1" name="search_filt" value="title" 
+						    {% if search_filt == 'title' %} checked='' {% endif %}>
+						<label for="sort1" class="sort__item">По названию<span class="icon-arrow-up-down"><span class="path1"></span></span></label>
+						<input type="radio" id="sort2" name="search_filt" value="price" 
+						{% if search_filt == 'price' %} checked='' {% endif %}>
+						<label for="sort2" class="sort__item">По цене  <span class="icon-arrow-up-down"><span class="path1"></span></span></label>
+						<button type="submit" for="sort2" class="sort__item">Применить</button>
+					</form>
+
+					<ul class="filter-list tabs">
+						<li class="filter-list__item">
+							<a href="#tab_1" class="filter-list__link"><span class="icon-list-2"></span></a>
+						</li>
+						<li class="filter-list__item active">
+							<a href="#tab_2" class="filter-list__link"><span class="icon-list"></span></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="box-main">
+				<aside class="sidebar">
+					<form method="POST" action=".">
+					{% csrf_token %}
+					<div class="accordion">
+						<div class="accordion__head open">
+							<h5 class="accordion__title">Категории</h5>
+							<span class="icon-minus"></span>
+						</div>
+						<div class="accordion__body">
+							<ul class="check-list">
+								
+	{% for item in category %}					
+		<li class="check-list__item">
+			<input type="checkbox" class="styler" name="{{ item.id }}" value="{{ item }}"
+
+			{% if item.id in cat_on %}
+					checked
+			{% endif %}>
+
+			<label for="check-list1">{{ item }}</label>
+		</li>
+	{% endfor  %}
+							</ul>
+						</div>
+					</div>
+			<button type="submit" class="btn btn-primary">Search</button>
+				</form>
+				</aside>
+<div class="content">
+<div class="box-tab-cont">
+	<div class="tab-cont hide" id="tab_1">
+		<div class="box-product">
+	{% for item in query_products %}
+									
+		<div class="product product--horizontal">
+			<div class="product__img">
+				<img src="{{ item.image.url }}" alt="">
+			</div>
+			<div class="product__content">
+				<h6 class="product__title">
+					<a href="{{ item.product.get_absolute_url }}">{{ item.product.title }}</a>
+				</h6>
+				<span class="product__category">{{ item.product.category }}</span>
+			</div>
+			
+			<div class="product__footer hit">
+				<span class="price">{{ item.product.price }} UAH</span>
+			</div>
+			<div class="product__card">
+
+				<a href="{{ item.product.get_add_to_cart_url }}" class="btn">Купить</a><br>
+			</div>
+		</div>
+	{% endfor %}
+		</div>
+	</div>
+	<div class="tab-cont " id="tab_2">
+		<div class="box-product">
+
+{% for item in query_products %}
+<div class="product">
+	<h6 class="product__title">
+		<a href="{{ item.product.get_absolute_url }}"> {{ item.product.title }} </a>
+	</h6>
+	<div class="product__img">
+		<img src="{{ item.image.url }}" alt="">
+		<div class="product__card">
+			<a href="{{ item.product.get_add_to_cart_url }}" class="btn">Купить</a>
+
+		</div>
+	</div>
+	<div class="product__footer">
+		<span class="price">{{ item.product.price }} UAH</span>
+	</div>
+</div>
+{% endfor %}
+
+		</div>
+	</div>
+</div>
+{% if is_paginated %}
+	<div class="paginator">
+		<span class="paginator__item">
+			Page {{query_products.number}} of {{ query_products.paginator.num_pages }}
+		</span>
+		<ul class="paginator__item">
+			<li class="paginator__item {% if not query_products.has_previous %} disabled {% endif %}">
+
+			{% if query_products.has_previous %}
+                <a class="page__link" href="?page={{ query_products.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">Previous</a>
+            {% endif %}
+
+			</li>
+	{% for n in query_products.paginator.page_range %}
+		{% if query_products.number == n %}
+			<li class="paginator__item">
+				<a class="page__link active" href="?page={{ n }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"> {{ n }} <span class="sr-only"></span>
+				</a>
+			</li>
+		{% elif n > query_products.number|add:-3 and n < query_products.number|add:3 %}
+			<li class="paginator__item">
+				<a class="page__link" href="?page={{ n }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}"> {{ n }} </a>
+			</li>
+		{% endif %}					
+	{% endfor %}
+			<li class="paginator__item {% if not query_products.has_next %} disabled {% endif %}">
+
+			{% if query_products.has_next %}
+                <a class="page__link" href="?page={{ query_products.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">Next</a>
+            {% endif %}
+
+			</li>
+		</ul>
+		<span class="paginator__item">20 items</span>
+	</div>
+{% endif %}
+</div>
+</div>
+</div>
+</main>
+
+
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="checkout__cont">
+  <form method="POST">
+    {% csrf_token %}
+    <div class="checkout__cont__head">Оформление заказа</div>
+    <div class="checkout__textbox">
+      <label>{{ form.first_last_name.label }}</label>
+      {{ form.first_last_name }}
+    </div>
+
+    <div class="checkout__textbox">
+      <label>{{ form.city_region.label }}</label>
+      {{ form.city_region }}
+    </div>
+
+    <div class="checkout__textbox">
+      <label>{{ form.delivery_address.label }}</label>
+      {{ form.delivery_address  }}
+    </div>
+
+    <div class="checkout__textbox">
+      <label>{{ form.phone.label }}</label>
+      {{ form.phone }}
+    </div>
+
+    <div class="checkout__textbox">
+      <label>{{ form.comments.label }}</label>
+      {{ form.comments }}
+    </div>
+
+    <button class="checkout__btn" type="submit">Подтвердить заказ</button>
+  </form>
+</div>
+
+
+
+{% endblock content %}

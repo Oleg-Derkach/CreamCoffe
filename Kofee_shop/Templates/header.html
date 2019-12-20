@@ -1,0 +1,88 @@
+{% load static %}
+
+<header class="header">
+	<div class="logo">
+		<a href="{% url 'page_1:home_view' %}">
+			<img src="{% static 'img/logo.png' %}" alt="" class="hidden-iphone">
+			<img src="{% static 'img/logo-mobile.png' %}" alt="" class="hidden-ipad">
+		</a>
+	</div>
+	<div class="search">
+		<form method="GET">
+			{{ search_bar.form }}
+			<input type="submit" value="&#xe90b;" class="search__button "/>
+		</form>
+	</div>
+	<div class="location">
+		<span class="icon-pin"></span>
+		<a href="#" class="location__link">Ukrane</a>
+	</div>	
+	<ul class="profile-menu">
+		<li class="profile-menu__item dropdown dropdown--right dropdown--white">
+			<a href="#" class="profile-menu__link">
+				<span class="basket">
+					<span class="icon-bag"></span>
+					<span class="badge">{{ order.items.all | length }}</span>
+				</span>
+				<span class="b-price">{{ order.get_total | floatformat:"1" }}</span>
+			</a>
+			<div class="dropdown-content">
+				<div class="cart">
+					<ul class="cart-list">
+						{% for product in order.items.all %}
+						<li class="cart-list__item">
+							<div class="cart-list__info">
+								<h6 class="product__title"><a href="{{ product.product_item.get_absolute_url }}">
+								{{ product.product_item.title }}</a></h6>
+								<div class="cart-list__details">
+									<span class="price">{{ product.get_total_item_price | floatformat:"1" }}</span>
+									<span class="product__details">
+										<span> {{ product.quantity }} pcs </span>  
+									</span>
+								</div>
+							</div>
+							<div class="cart-list__delete">
+								<a href="{% url 'page_1:remove_from_cart' product.product_item.slug %}" class="js-remove-cart">
+									<span class="icon-close"><span class="path1"></span><span class="path2"></span></span>
+								</a>
+							</div>
+						</li>
+						{% endfor %}
+					</ul>
+					<div class="cart-footer">
+						<span class="total">Всего</span>
+						<span class="price">{{ order.get_total | floatformat:"1" }}</span>
+						<a href="{% url 'page_1:order_summary' %}" class="btn">Заказ</a>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li class="profile-menu__item dropdown dropdown--right dropdown--white">
+			<a href="#" class="profile-menu__link"><span class="icon-user"></span></a>
+			<div class="dropdown-content">
+				<ul class="user-menu">
+					<li class="user-menu__item">
+						<a href="{% url 'page_1:order_summary' %}" class="user-menu__link"><span class="icon-basket"></span>Заказ</a>
+					</li>
+					<li class="user-menu__item">
+						<a href="{% url 'page_1:logout' %} " class="user-menu__link"><span class="icon-power"></span>Log out</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+
+
+</header>
+<section class="header-inner" style="background-image: url({% static 'img/header-inner.png' %});">
+	
+<ul class="bread-crambs">
+	<li class="bread-crambs__item">
+		<a href="{% url 'page_1:home_view' %}" class="bread-crambs__link">Home</a> /
+	</li>
+</ul>
+
+</section>
+
+	
+		

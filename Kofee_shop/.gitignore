@@ -1,0 +1,14 @@
+
+Deployment/Kofee_shop_nginx.conf.save
+Kofee_shop/settings.py
+Kofee_shop/__pycache__/
+static/
+__pycache__/
+Page_1/migrations/
+Page_1/__pycache__/
+db.sqlite3
+nano.save
+kofee.ini.save
+Price.xls
+uwsgi_nginx.sock
+
