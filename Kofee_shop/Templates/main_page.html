@@ -20,11 +20,14 @@
 
 						<input type="radio" id="sort1" name="search_filt" value="title" 
 						    {% if search_filt == 'title' %} checked='' {% endif %}>
-						<label for="sort1" class="sort__item">По названию<span class="icon-arrow-up-down"><span class="path1"></span></span></label>
+						<label for="sort1" class="sort__item">По названию</label>
 						<input type="radio" id="sort2" name="search_filt" value="price" 
 						{% if search_filt == 'price' %} checked='' {% endif %}>
-						<label for="sort2" class="sort__item">По цене  <span class="icon-arrow-up-down"><span class="path1"></span></span></label>
-						<button type="submit" for="sort2" class="sort__item">Применить</button>
+						<label for="sort2" class="sort__item">По цене</label>
+						
+						<button type="submit" for="sort2" class="btn btn-primary">
+						Применить</button>
+						
 					</form>
 
 					<ul class="filter-list tabs">
@@ -64,7 +67,9 @@
 							</ul>
 						</div>
 					</div>
-			<button type="submit" class="btn btn-primary">Search</button>
+					<div class="btn__search__accordion">
+			<button type="submit" class="btn btn-primary">Показать</button>
+					</div>
 				</form>
 				</aside>
 <div class="content">
@@ -75,7 +80,7 @@
 									
 		<div class="product product--horizontal">
 			<div class="product__img">
-				<img src="{{ item.image.url }}" alt="">
+				<a href="{{ item.product.get_absolute_url }}"><img src="{{ item.image.url }}"></a>
 			</div>
 			<div class="product__content">
 				<h6 class="product__title">
@@ -100,14 +105,22 @@
 
 {% for item in query_products %}
 <div class="product">
+
 	<h6 class="product__title">
 		<a href="{{ item.product.get_absolute_url }}"> {{ item.product.title }} </a>
 	</h6>
+
+	<div class="prod__desctipt">
+		<a href="{{ item.product.get_absolute_url }}" class="">{{ item.product.description|truncatechars:350 }}</a>
+	</div>
+	
 	<div class="product__img">
-		<img src="{{ item.image.url }}" alt="">
+		<div class="img__back">
+			<a href="{{ item.product.get_absolute_url }}"><img src="{{ item.image.url }}">
+			</a>
+		</div>
 		<div class="product__card">
 			<a href="{{ item.product.get_add_to_cart_url }}" class="btn">Купить</a>
-
 		</div>
 	</div>
 	<div class="product__footer">

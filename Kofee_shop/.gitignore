@@ -2,7 +2,7 @@
 Deployment/Kofee_shop_nginx.conf.save
 Kofee_shop/settings.py
 Kofee_shop/__pycache__/
-static/
+static/media
 __pycache__/
 Page_1/migrations/
 Page_1/__pycache__/
