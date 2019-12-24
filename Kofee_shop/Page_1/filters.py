@@ -7,7 +7,7 @@ class ItemFilters(django_filters.FilterSet):
     product__title = django_filters.CharFilter(lookup_expr='icontains', 
                                                label = '', 
                                                widget=forms.TextInput(attrs={
-                                    'placeholder': 'Search', 
+                                    'placeholder': 'Поиск', 
                                     'class': 'form-control search__input'}))
     class Meta:
         model = ProductImage

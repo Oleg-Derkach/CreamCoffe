@@ -16,19 +16,21 @@
 				</div>
 				<div class="filter-content">
 					<span class="filter__title">Сортировать</span>
-					<form class="sort" method="GET" action=".">
+					<div class="sort">
 
-						<input type="radio" id="sort1" name="search_filt" value="title" 
-						    {% if search_filt == 'title' %} checked='' {% endif %}>
-						<label for="sort1" class="sort__item">По названию</label>
-						<input type="radio" id="sort2" name="search_filt" value="price" 
-						{% if search_filt == 'price' %} checked='' {% endif %}>
-						<label for="sort2" class="sort__item">По цене</label>
+	<input type="radio" id="sort1" name="search_filt" value="title" 
+	    {% if search_filt == 'title' %} checked='' {% endif %}>
+	<label for="sort1" class="sort__item">
+		<a href="?search_filt=title">По названию</a>
+	</label>
+	
+	<input type="radio" id="sort2" name="search_filt" value="price" 
+	{% if search_filt == 'price' %} checked='' {% endif %}>
+	<label for="sort2" class="sort__item">
+	<a href="?search_filt=price">По цене</a>
+	</label>
 						
-						<button type="submit" for="sort2" class="btn btn-primary">
-						Применить</button>
-						
-					</form>
+					</div>
 
 					<ul class="filter-list tabs">
 						<li class="filter-list__item">

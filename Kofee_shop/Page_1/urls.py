@@ -14,15 +14,12 @@ from .views import (home_view,
                     OrderSummaryView,
                     remove_single_item_from_cart,
                     CheckoutView,
-                    cookies_demo,
-                    
                     )
 
 app_name = 'page_1'
 
 urlpatterns = [
         path('', home_view, name='home_view'),
-        path('cookies_demo/', cookies_demo, name='cookies_demo'),
         path('logout/', logout_view, name='logout'),
         path('order_summary/', OrderSummaryView.as_view(), name='order_summary'),
         path('product/<slug>/', product_view, name='product_view'),

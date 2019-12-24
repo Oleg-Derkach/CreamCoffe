@@ -86,6 +86,54 @@ span
 	display: none
 
 
+/* Login  /  SignUp  /  SignIn
+     ====================== */
+
+.login__page 
+	width: 350px
+	padding: 15px
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.3)
+	h1 
+		margin: 0 0 20px
+		line-height: 1
+		color: #44c4e7
+		font-size: 18px
+		font-weight: 400
+	p
+		font-family: $font-family, Arial, sans-serif
+		font-size: 14px
+	input 
+		outline: none
+		display: block
+		width: 100%
+		margin: 0 0 20px
+		padding: 10px 15px
+		border: 1px solid #ccc
+		color: #ccc
+		font-family: "Roboto"
+		box-sizing: border-box
+		font-size: 14px
+		-webkit-font-smoothing: antialiased
+		-moz-osx-font-smoothing: grayscale
+		transition: 0.2s linear
+		-webkit-appearance: checkbox
+		&input:focus 
+			color: #333
+			border: 1px solid #44c4e7
+
+	button 
+		cursor: pointer
+		background: #44c4e7
+		width: 100%
+		padding: 10px 15px
+		border: 0
+		color: #fff
+		font-family: "Roboto"
+		font-size: 14px
+		font-weight: 400
+		&:hover 
+			background: #369cb8
+
 	
 .favorite
 	color: #b8b8b8
@@ -101,6 +149,21 @@ span
 /* Header
      ====================== */
 
+.messages__block
+	display: block
+	position: absolute
+	padding: 0px
+	margin: 5px
+	z-index: 1
+	opacity: 5
+	background-color: aquamarine
+	.alert
+		padding: 5px
+		font-family: $font-family
+		font-size: 14px
+		border: 1px solid black
+
+		
 .header 
 	height: 80px
 	background-color: #ffffff
@@ -373,7 +436,7 @@ span
 
 
 /* Content
-     ====================== */
+     ====================== 
 
 /* 
  *	==== Header Inner
@@ -496,7 +559,7 @@ span
 		img 
 			object-fit: cover
 			height: 200px
-			width: 100%
+			width: 200px
 
 	&__card,  
 		opacity: 0
@@ -681,11 +744,16 @@ span
 		color: #fff
 		background-color: $color
 		padding: 0 20px
-		[class*="icon"] 
+		a 
+			display: block
+			padding: 10px
+			text-decoration: none
 			color: #fff
-			.path1:before 
-				content: '\e902'
-
+	a 
+		display: block
+		padding: 10px
+		text-decoration: none
+		color: $color
 	&__item 
 		display: flex
 		text-align: center
@@ -700,10 +768,6 @@ span
 		cursor: pointer
 		&:hover 
 			color: $color-blue
-		[class*="icon"]
-			color: #d5d5d5
-			margin-left: 5px
-
 
 
 .hide
@@ -1105,8 +1169,6 @@ table.blueTable
 		.product 
 			width: 33.33%
 
-
-
 +max-screen(930px)
 	.product
 		width: 33.33%
@@ -1139,9 +1201,7 @@ table.blueTable
 		padding: 0
 		.hr
 			display: none
-			
-		
-		
+				
 	.dropdown-menu
 		display: none
 		padding-left: 30px
@@ -1251,9 +1311,6 @@ table.blueTable
 				width: 75px
 				padding-left: 10px
 				
-				
-				
-
 
 +max-screen(479px)
 	.product, .box-product.full .product

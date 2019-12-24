@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
-from django.views.generic import ListView, DetailView, View
+from django.views.generic import View
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib import messages
@@ -14,59 +14,9 @@ from .filters import ItemFilters
 from .telegram_bot import send_telegram_notification, send_email_notification
 
 
-def is_valid_queryparam(param):
-    return param != '' and param is not None
 
-def cookies_demo(request):
 
-    all_category = [cat for cat in Category.objects.all()]
-    all_cat_id = [str(cat.id) for cat in Category.objects.all()]
-    
-    '''
-    {'get':   {'color_set': '#000000', '66': 'Зеленый элитный  чай', '67': 'Кофе'}, 
-    'cookies': {'filt': 'title', 'page': '1', '68': 'off', '66': 'on', '67': 'on'}}
-    '''
-    get_categories = {str(k):v for k, v in request.GET.items() if k in all_cat_id}
-    cookies_categories = {str(k):v for k, v in request.COOKIES.items() if k in all_cat_id}
-    cat_status = {} 
-    cat_on = []
-    get_flag = False
-    
-    for item in all_cat_id:
-        if str(item) in get_categories:
-            get_flag = True
-
-    if not get_flag:
-        for item in all_cat_id:
-            if str(item) in cookies_categories:
-                cat_status[item] = cookies_categories[item]
-            else:
-                cookies_categories[item] = 'off'
-                cat_status[str(item)] = 'off'
-    else:
-        for item in all_cat_id:
-            if item in get_categories:
-                cat_status[item] = 'on'
-                cookies_categories[item] = 'on'   
-            else:
-                cat_status[item] = 'off'
-                cookies_categories[item] = 'off'
-    
-    for item in cat_status:
-        if cat_status[item] == 'on':
-            cat_on.append(int(item))           
-         
-    product_card = ProductImage.objects.filter(is_main = True).order_by("product__title")
-    queryset = ItemFilters(request.GET, queryset=product_card)
-    response = render(request, 'cookies.html', {'category': all_category,
-                                                'cat_on':cat_on,
-                                                'query_products':queryset,})
-    for item in cat_status:
-        response.set_cookie(str(item), cat_status[item])
- 
-    return response 
-
-def filter(request, cat_status):
+def _filter(request, cat_status):
 
     product_card = ProductImage.objects.filter(is_main = True)
     counter = 0
@@ -85,6 +35,7 @@ def home_view(request):
     all_category = [cat for cat in Category.objects.all()]
     main_filter = {'check_box':{}, 'search_filt':'', 'cat_on':[]}
     off_status_of_check_box = 0
+    page = request.GET.get('page', request.COOKIES.get('page'))
     
     if request.method == 'GET':
         for cat in all_category:
@@ -95,31 +46,32 @@ def home_view(request):
                 main_filter['check_box'][str(cat.id)] = 'off'
                 
     elif request.method == 'POST':
-         for cat in all_category:
-             if str(cat.id) in request.POST:
-                 main_filter['check_box'][str(cat.id)] = 'on'
-                 main_filter['cat_on'].append(int(cat.id))
-             else:
-                 main_filter['check_box'][str(cat.id)] = 'off'
-                 off_status_of_check_box += 1 
-                 
+        page = 1
+        for cat in all_category:
+            if str(cat.id) in request.POST:
+                main_filter['check_box'][str(cat.id)] = 'on'
+                main_filter['cat_on'].append(int(cat.id))
+            else:
+                main_filter['check_box'][str(cat.id)] = 'off'
+                off_status_of_check_box += 1 
+                                 
     main_filter['search_filt'] = request.GET.get('search_filt')
     if main_filter['search_filt'] == None:
         main_filter['search_filt'] = request.COOKIES.get('search_filt')
         if main_filter['search_filt'] == None:
             main_filter['search_filt'] = 'title'
-
-                   
+    else:
+        page = 1
+                
     if off_status_of_check_box ==  len(all_category):
         product_card = ProductImage.objects.filter(is_main = True)
     else:
-        product_card = filter(request, main_filter['check_box']) 
+        product_card = _filter(request, main_filter['check_box']) 
 
     product_card = product_card.order_by("product__" + main_filter['search_filt'])
     search_bar = ItemFilters(request.GET, queryset=product_card)
     
     
-
     if request.user.is_authenticated:
         try:
             order = Order.objects.get(user=request.user, ordered=False)
@@ -129,7 +81,6 @@ def home_view(request):
         order = None
          
     paginator = Paginator(search_bar.qs, 20)
-    page = request.GET.get('page', request.COOKIES.get('page'))
 
     if page == None:
         page = 1
@@ -207,10 +158,10 @@ class CheckoutView(View):
                     print('some problem with send_email_notification')
                 send_telegram_notification(txt)   
                 return redirect("/")
-            messages.warning(self.request, "Failed checkout") 
+            messages.warning(self.request, "Заполните недостающие поля.") 
             return redirect('page_1:checkout')
         except ObjectDoesNotExist:
-            messages.error(self.request, "You do not have an active order")
+            messages.error(self.request, "Добавьте товар в корзину.")
             return redirect('page_1:order_summary')          
             
   
@@ -224,39 +175,9 @@ class OrderSummaryView(LoginRequiredMixin, View):
             return render(self.request, 'order_summary.html', context)
         
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
+            messages.warning(self.request, "Добавьте товар в корзину.")
             return redirect("/")
         
-'''
-from django.views.generic import ListView, DetailView, View
-c помощью импортированых классов ListView, DetailView, View можно сконструировать
-вьюшки
-  
-#сортировки Query Set   
-
-----------------------------------------------------------------
-запись в одну строчку сортировки
-#list_product = sorted(list_product, key=lambda product: product.status_available == 'not_available')
--------------------------------------------------------
-   Кастомный фильтр QuerySet , может быть любым - просто добавить этот метод в класс
-    и описать как нужно сортировать QuerySet
-    def get_queryset(self):
-        return ProductImage.objects.order_by('-product__price')
-----------------------------------------------------------------------
-
-    def get_queryset(self):
-        slug = self.kwargs.get('slug')
-        return ProductImage.objects.filter(product__slug=self.kwargs['slug'])
-        
-    этот метод перезаписывает классический метод получения списка. Он нужен
-    для того чтобы можно было фильтровать список по ключу переданному в патче
-    URL. Так этот ключ заносится в self.kwargs (это соварь), к которому
-    можно обратится по ключу и получить значение, например для фильтра
-----------------------------------------------------------------------------
-#    is_authenticated - если пользователь авторизирован)
-#    is_anonymous - если пользователь анонимный)
-----------------------------------------------------------------------------
-'''
 @login_required
 def add_to_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)         # берем продукт по slug
@@ -270,17 +191,17 @@ def add_to_cart(request, slug):
         if order.items.filter(product_item__slug=item.slug).exists():  # если товар уже есть в заказе
             order_item.quantity += 1                # прибавить одну единицу            
             order_item.save()
-            messages.info(request, "This item quantity was updated.")
+            messages.info(request, "Корзина изменена.")
             return redirect("page_1:order_summary") 
         else:
             order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
+            messages.info(request, "Товар добавлен.")
             return redirect("page_1:order_summary")
     else:
         ordered_date = timezone.now()
         order = Order.objects.create(user=request.user, ordered_date=ordered_date)
         order.items.add(order_item)
-        messages.info(request, "This item was added to your cart.")
+        messages.info(request, "Товар добавлен.")
 
     return redirect("page_1:order_summary")
 
@@ -296,14 +217,13 @@ def remove_from_cart(request, slug):
                                             user=request.user,
                                             ordered=False)[0]
             order.items.remove(order_item)
-
-            messages.info(request, "This item was removed from your cart.")
+            messages.info(request, "Корзина изменена.")
             return redirect("page_1:order_summary") 
         else:
-            messages.info(request, "This item was not in your cart")
+            messages.info(request, "Этого товара нет в корзине")
             return redirect("page_1:product_view", slug=slug)            
     else:
-        messages.info(request, "You do not have an active order")
+        messages.info(request, "Добавьте товар в корзину.")
     return redirect("page_1:product_view", slug=slug)
 
 
@@ -325,13 +245,13 @@ def remove_single_item_from_cart(request, slug):
             else:
                 order.items.remove(order_item)
 
-            messages.info(request, "This item quantity was updated.")
+            messages.info(request, "Корзина изменена.")
             return redirect("page_1:order_summary")
         else:
-            messages.info(request, "This item was not in your cart")
+            messages.info(request, "Этого товара нет в корзине")
             return redirect("page_1:product_view", slug=slug)
     else:
-        messages.info(request, "You do not have an active order")
+        messages.info(request, "Добавьте товар в корзину.")
         return redirect("page_1:product_view", slug=slug)
 
 
