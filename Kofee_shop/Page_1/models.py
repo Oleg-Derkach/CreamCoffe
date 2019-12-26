@@ -22,15 +22,16 @@ class Category(models.Model):
         return self.category_name
 
 
-
 class Item(models.Model):
     title = models.CharField(max_length=100)
-    price = models.FloatField()
-    discount_price = models.FloatField(blank=True, null=True)
-    category = models.ForeignKey(Category, blank=True, null=True, default=None, on_delete=models.CASCADE)
     slug = models.SlugField()
+    price = models.FloatField()
+    min_req = models.FloatField()
+    pcs_or_kg = models.CharField(max_length=10)
+    category = models.ForeignKey(Category, default=None, on_delete=models.CASCADE)   
+    available = models.BooleanField(default=True)
     description = models.TextField()
-
+    
 
     def __str__(self):
         return self.title
@@ -91,19 +92,17 @@ class OrderItem(models.Model):
     def __str__(self):
         return "{} of {}".format(self.quantity, self.product_item.title)
 
-    def get_total_item_price(self):
-        return self.quantity * self.product_item.price
+    def get_total_quantity(self):
+        return self.product_item.min_req * self.quantity
 
-    def get_total_discount_item_price(self):
-        return self.quantity * self.product_item.discount_price
-
-    def get_amount_saved(self):
-        return self.get_total_item_price() - self.get_total_discount_item_price()
+    def get_one_kg_price(self):
+        if self.product_item.pcs_or_kg == 'KG':
+            return self.product_item.price
+        if self.product_item.pcs_or_kg == 'PCS':
+            return self.product_item.price / self.product_item.min_req          
 
     def get_final_price(self):
-        if self.product_item.discount_price:
-            return self.get_total_discount_item_price()
-        return self.get_total_item_price()
+        return self.get_total_quantity() * self.get_one_kg_price()
 
 
 class Order(models.Model):
@@ -122,17 +121,6 @@ class Order(models.Model):
     refund_granted = models.BooleanField(default=False)
 
 
-    '''
-    1. Item added to cart
-    2. Adding a billing address
-    (Failed checkout)
-    3. Payment
-    (Preprocessing, processing, packaging etc.)
-    4. Being delivered
-    5. Received
-    6. Refunds
-    '''
-
     def __str__(self):
         return self.user.username
 
@@ -140,17 +128,16 @@ class Order(models.Model):
         total = 0
         for order_item in self.items.all():
             total += order_item.get_final_price()
-#        if self.coupon:
-#            total -= self.coupon.amount
+
         return total
     
     def ordered_items(self):
         list_of_items = []
         for items in self.items.filter(user=self.user):
-            list_of_items.append(str(items.product_item.title + ' qtty= ' + 
-                                     str(items.quantity) +  ' price/per item= ' +
-                                     str(items.product_item.price) + ' price/per cat= '+ 
-                                     str(items.get_final_price()))) 
+            list_of_items.append(str(items.product_item.title +'\n'+ ' qtty= ' + 
+                                     str(items.quantity)+'\n'+ ' price/per item= ' +
+                                     str(items.product_item.price)+'\n'+ ' price/per cat= '+ 
+                                     str(items.get_final_price())+'\n'+'------------------')) 
         return list_of_items
     
     

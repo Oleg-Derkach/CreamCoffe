@@ -18,7 +18,7 @@ from .telegram_bot import send_telegram_notification, send_email_notification
 
 def _filter(request, cat_status):
 
-    product_card = ProductImage.objects.filter(is_main = True)
+    product_card = ProductImage.objects.filter(is_main = True).filter(product__available=True)
     counter = 0
     
     for cat_id in cat_status:
@@ -64,7 +64,7 @@ def home_view(request):
         page = 1
                 
     if off_status_of_check_box ==  len(all_category):
-        product_card = ProductImage.objects.filter(is_main = True)
+        product_card = ProductImage.objects.filter(is_main = True).filter(product__available=True)
     else:
         product_card = _filter(request, main_filter['check_box']) 
 
@@ -106,7 +106,6 @@ def home_view(request):
 
   
 def product_view(request, slug):
-
 
     product_images = ProductImage.objects.filter(product__slug=slug)
     product_item = Item.objects.filter(slug=slug)[0]
@@ -150,7 +149,7 @@ class CheckoutView(View):
                 txt = ' user: {}\n first_last_name: {}\n city_region: {}\n delivery_address: {}\n\
                 phone: {}\n Order: {}\n Ttl/price: {}\n comments: {}\n'.format(address.user, address.first_last_name, \
                 address.city_region, address.delivery_address, address.phone, \
-                order.ordered_items(), order.get_total() ,address.comments)
+                '\n'.join(order.ordered_items()), order.get_total() ,address.comments)
                 # send massage to manager, to confirm the order  
                 try:
                     send_email_notification(txt)

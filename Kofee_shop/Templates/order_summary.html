@@ -1,17 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 
+Прессованный медаль зеленый  ,Вес: 1.5 ,1251.75
+
 {% block content %}
 <div class="table-responsive">
-    <h2>Order Summary</h2>
+    <h2>Заказ</h2>
     <table class="blueTable">
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Название</th>
-            <th scope="col">Цена</th>
+            <th scope="col">Название</th>          
+            <th scope="col">Цена за 1 кг</th>
+            <th scope="col">Мин. заказ (Кг)</th>
             <th scope="col">Количество</th>
-            <th scope="col">Всего</th>
+            <th scope="col">Сумма</th>
         </tr>
         </thead>
         <tbody>
@@ -21,21 +24,18 @@
             <td>
                 <a href="{{ order_item.product_item.get_absolute_url }}">{{ order_item.product_item.title }}</a>
             </td>
-            <td>{{ order_item.product_item.price }}</td>
+
+            <td>{{ order_item.get_one_kg_price| floatformat:"2" }}</td>
+
+            <td>{{ order_item.product_item.min_req| floatformat:"2" }}</td>
+
             <td>
                 <a href=" {% url 'page_1:remove_single_item_from_cart' order_item.product_item.slug %}"><i class="fa fa-minus" aria-hidden="true" ></i></a> 
-                    {{ order_item.quantity }}  
+                   {{ order_item.get_total_quantity| floatformat:"2" }}
                 <a href=" {% url 'page_1:add_to_cart' order_item.product_item.slug %}"><i class="fa fa-plus" aria-hidden="true"></i></a>
             </td>
             <td>
-
-            {% if order_item.product_item.discount_price %}
-                {{ order_item.get_total_discount_item_price }}  ₴
-                <span class="badge badge-primary">Saving ₴ {{ order_item.get_amount_saved }} </span>
-            {% else %}
-                {{ order_item.get_total_item_price| floatformat:"1" }}  ₴
-
-            {% endif %}
+                {{ order_item.get_final_price| floatformat:"2" }} Грн
             <a href=" {% url 'page_1:remove_from_cart' order_item.product_item.slug %}">
                 <i class="fa fa-trash" aria-hidden="true"></i>
             </a>
@@ -43,10 +43,9 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="5">Your cart is empty</td>
+            <td colspan="5">Добавьте товар в корзину</td>
         </tr>
         <tr>
-
             <td colspan="5"> 
             <a class='btn btn-primary float-right' href='/'> Продолжить покупки </a>
             </td>
@@ -54,11 +53,11 @@
         {% endfor %}
         {% if object.get_total %}
         <tr>
-            <td colspan="4"><b> Order Total</b></td>
+            <td colspan="5"><b> Всего </b></td>
             <td> <b>{{ object.get_total| floatformat:"1" }} ₴ </b></td>
         </tr>
         <tr>
-            <td colspan="5"> 
+            <td colspan="6"> 
                 <a class='btn btn-warning float-right ml-2' href='/checkout/'> Оформить заказ </a>
                 <a class='btn btn-primary float-right' href='/'> Продолжить покупки </a>
             </td>

@@ -92,7 +92,9 @@
 			</div>
 			
 			<div class="product__footer hit">
-				<span class="price">{{ item.product.price }} UAH</span>
+				<span class="price">{{ item.product.price }} ГРН /
+	{% if item.product.pcs_or_kg == "PCS" %} Шт  {% else %} Кг {% endif %}
+				</span>
 			</div>
 			<div class="product__card">
 
@@ -126,7 +128,9 @@
 		</div>
 	</div>
 	<div class="product__footer">
-		<span class="price">{{ item.product.price }} UAH</span>
+		<span class="price">{{ item.product.price }} ГРН /
+	{% if item.product.pcs_or_kg == "PCS" %} Шт  {% else %} Кг {% endif %}
+		</span>
 	</div>
 </div>
 {% endfor %}

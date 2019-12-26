@@ -9,6 +9,7 @@ class ProductImageInline(admin.TabularInline):
 class ItemAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Item._meta.fields]
     inlines = [ProductImageInline]
+    search_fields = ['title']
     
 
     class Meta:

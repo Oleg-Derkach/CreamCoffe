@@ -169,27 +169,19 @@ span {
     color: #44c4e7;
     font-size: 18px;
     font-weight: 400; }
-  .login__page p {
-    font-family: "Varela Round", Arial, sans-serif;
-    font-size: 14px; }
-  .login__page input {
-    outline: none;
-    display: block;
-    width: 100%;
-    margin: 0 0 20px;
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    color: #ccc;
-    font-family: "Roboto";
-    box-sizing: border-box;
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    transition: 0.2s linear;
-    -webkit-appearance: checkbox; }
-    .login__page inputinput:focus {
-      color: #333;
-      border: 1px solid #44c4e7; }
+  .login__page form {
+    list-style: none;
+    font-size: 18px; }
+    .login__page form input {
+      display: block;
+      width: 100%;
+      margin: 0 0 20px;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      font-size: 14px; }
+      .login__page form input[type="checkbox"] {
+        display: block;
+        -webkit-appearance: checkbox; }
   .login__page button {
     cursor: pointer;
     background: #44c4e7;
@@ -197,9 +189,7 @@ span {
     padding: 10px 15px;
     border: 0;
     color: #fff;
-    font-family: "Roboto";
-    font-size: 14px;
-    font-weight: 400; }
+    font-size: 14px; }
     .login__page button:hover {
       background: #369cb8; }
 
@@ -662,7 +652,7 @@ span {
     align-items: center;
     justify-content: center; }
     .product__footer .price, .product__footer .discount, .product__footer .pbadge {
-      width: 50%; }
+      width: 65%; }
     .product__footer .discount {
       text-align: right; }
     .product__footer.sale .price {
@@ -784,7 +774,7 @@ span {
   .sort input:checked + .sort__item {
     color: #fff;
     background-color: #222;
-    padding: 0 20px; }
+    padding: 0; }
     .sort input:checked + .sort__item a {
       display: block;
       padding: 10px;
@@ -801,7 +791,8 @@ span {
     justify-content: center;
     align-items: center;
     height: 30px;
-    padding: 0px 20px;
+    padding: 0;
+    margin: 0 5px;
     font-size: 12px;
     font-weight: 400;
     line-height: 16px;
@@ -1019,7 +1010,8 @@ span {
 
 .table-responsive {
   margin: 10px;
-  padding: 10px; }
+  padding: 10px;
+  overflow: auto; }
 
 /* Product basket
  * ====================== */
