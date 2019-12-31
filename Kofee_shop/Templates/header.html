@@ -8,8 +8,8 @@
 		</a>
 	</div>
 	<div class="search">
-		<form method="GET">
-			{{ search_bar.form }}
+		<form method="GET" action="{% url 'page_1:home_view' %}">
+			<input type="text" name="product__title" id="id_product__title" placeholder="Поиск" class="form-control search__input">
 			<input type="submit" value="&#xe90b;" class="search__button "/>
 		</form>
 	</div>

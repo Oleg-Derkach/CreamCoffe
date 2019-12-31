@@ -3,9 +3,13 @@ from django import forms
 
 class CheckoutForm(forms.Form):
 
-    first_last_name = forms.CharField(widget=forms.TextInput(attrs=
-                            {'placeholder':'ФИО'}),
-                            label="Фамилия Имя")
+    first_name = forms.CharField(widget=forms.TextInput(attrs=
+                            {'placeholder':'Имя'}),
+                            label="Имя")
+    
+    last_name = forms.CharField(widget=forms.TextInput(attrs=
+                            {'placeholder':'Фамилия'}),
+                            label="Фамилия")
     
     city_region = forms.CharField(widget=forms.TextInput(attrs=
                             {'placeholder':'Львов, Львовская обл.'}),

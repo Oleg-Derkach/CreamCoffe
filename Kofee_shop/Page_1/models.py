@@ -24,6 +24,7 @@ class Category(models.Model):
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
+    title_lower = models.CharField(max_length=100)
     slug = models.SlugField()
     price = models.FloatField()
     min_req = models.FloatField()
@@ -143,7 +144,8 @@ class Order(models.Model):
     
 class Address(models.Model): 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  
-    first_last_name = models.CharField(max_length=50, verbose_name="Заказчик", null=True)
+    first_name = models.CharField(max_length=50, verbose_name="Имя", null=True)
+    last_name = models.CharField(max_length=50, verbose_name="Фамилия", null=True)
     city_region = models.CharField(max_length=255, blank=True)
     delivery_address = models.CharField(max_length=100)
     phone = models.CharField(max_length=20, default=None, null=True)

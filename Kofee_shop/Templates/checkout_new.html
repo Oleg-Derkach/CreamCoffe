@@ -7,9 +7,15 @@
   <form method="POST">
     {% csrf_token %}
     <div class="checkout__cont__head">Оформление заказа</div>
+    
     <div class="checkout__textbox">
-      <label>{{ form.first_last_name.label }}</label>
-      {{ form.first_last_name }}
+      <label>{{ form.first_name.label }}</label>
+      {{ form.first_name }}
+    </div>
+    
+    <div class="checkout__textbox">
+      <label>{{ form.last_name.label }}</label>
+      {{ form.last_name }}
     </div>
 
     <div class="checkout__textbox">

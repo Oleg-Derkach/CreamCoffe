@@ -159,38 +159,65 @@ span {
 
 /* Login  /  SignUp  /  SignIn
  * ====================== */
-.login__page {
-  width: 350px;
-  padding: 15px;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3); }
-  .login__page h1 {
-    margin: 0 0 20px;
-    line-height: 1;
-    color: #44c4e7;
-    font-size: 18px;
-    font-weight: 400; }
-  .login__page form {
-    list-style: none;
-    font-size: 18px; }
-    .login__page form input {
-      display: block;
-      width: 100%;
-      margin: 0 0 20px;
-      padding: 10px 15px;
-      border: 1px solid #ccc;
-      font-size: 14px; }
-      .login__page form input[type="checkbox"] {
+.login-wrap {
+  width: 100%;
+  margin: 20px auto;
+  max-width: 525px;
+  min-height: 670px;
+  position: relative;
+  background: url(../img/bg.jpg) no-repeat center;
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19); }
+  .login-wrap .login-html {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding: 50px 30px 50px 30px;
+    box-sizing: border-box; }
+    .login-wrap .login-html a {
+      color: cyan; }
+    .login-wrap .login-html h1 {
+      color: #222;
+      font-size: 30px;
+      padding-bottom: 5px;
+      margin: 0 15px 10px 0;
+      border-bottom: 2px solid; }
+    .login-wrap .login-html p {
+      color: aliceblue;
+      font-size: 17px; }
+    .login-wrap .login-html form {
+      list-style: none;
+      font-size: 18px; }
+      .login-wrap .login-html form li {
+        padding: 10px 0;
+        color: #00ff08; }
+      .login-wrap .login-html form label {
+        color: aliceblue; }
+      .login-wrap .login-html form input {
+        border: none;
+        padding: 15px 20px;
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        width: 100%;
+        color: #fff;
         display: block;
-        -webkit-appearance: checkbox; }
-  .login__page button {
+        font-size: 20px; }
+        .login-wrap .login-html form input[type="checkbox"] {
+          display: inline;
+          -webkit-appearance: checkbox;
+          width: 19px;
+          height: 18px;
+          margin: 17px 22px; }
+  .login-wrap button {
     cursor: pointer;
     background: #44c4e7;
     width: 100%;
-    padding: 10px 15px;
+    padding: 15px 15px;
     border: 0;
     color: #fff;
-    font-size: 14px; }
-    .login__page button:hover {
+    font-size: 18px;
+    border-radius: 20px;
+    margin: 20px 0; }
+    .login-wrap button:hover {
       background: #369cb8; }
 
 .favorite {
@@ -213,12 +240,14 @@ span {
   margin: 5px;
   z-index: 1;
   opacity: 5;
-  background-color: aquamarine; }
+  background-color: aquamarine;
+  border-radius: 20px; }
   .messages__block .alert {
     padding: 5px;
     font-family: "Varela Round";
     font-size: 14px;
-    border: 1px solid black; }
+    border: 1px solid black;
+    border-radius: 20px; }
 
 .header {
   height: 80px;
@@ -556,8 +585,6 @@ span {
   display: flex;
   flex-wrap: wrap;
   margin-right: -1px; }
-  .box-product .product__title {
-    height: 30px; }
 
 .product {
   position: relative;
@@ -566,21 +593,6 @@ span {
   width: 14.285%;
   padding: 26px 30px;
   text-align: center; }
-  @media screen and (min-width: 992px) {
-    .product:not(.product--horizontal):hover .product__title, .product:not(.product--horizontal):hover .price {
-      color: #fff; }
-    .product:not(.product--horizontal):hover .product__footer {
-      position: relative;
-      z-index: 2; }
-    .product:not(.product--horizontal):hover .product__card, .product:not(.product--horizontal):hover .prod__desctipt {
-      z-index: 2;
-      opacity: 1;
-      visibility: visible; }
-    .product:not(.product--horizontal):hover:before {
-      height: 100%;
-      width: 100%;
-      left: 0;
-      top: 0; } }
   .product:before {
     content: "";
     display: block;
@@ -606,22 +618,20 @@ span {
         text-decoration: underline; }
   .product__img {
     position: relative;
-    margin: 45px 0 60px; }
+    margin: 15px 0 60px; }
     .product__img img {
       object-fit: cover;
       height: 200px;
-      width: 200px; }
+      width: 200px;
+      display: inherit; }
   .product__card {
-    opacity: 0;
-    visibility: hidden;
     position: absolute;
     left: -30px;
     right: -30px;
     padding: 0 10px;
     text-align: center;
     bottom: -70px;
-    transform: translate(0, -50%);
-    transition: all 0.4s; }
+    transform: translate(0, -50%); }
     .product__card .btn {
       margin-left: 10px; }
     .product__card .favorite {
@@ -774,15 +784,15 @@ span {
   .sort input:checked + .sort__item {
     color: #fff;
     background-color: #222;
-    padding: 0; }
+    padding: 0 5px; }
     .sort input:checked + .sort__item a {
       display: block;
-      padding: 10px;
+      padding: 5px;
       text-decoration: none;
       color: #fff; }
   .sort a {
     display: block;
-    padding: 10px;
+    padding: 5px;
     text-decoration: none;
     color: #222; }
   .sort__item {
@@ -791,15 +801,25 @@ span {
     justify-content: center;
     align-items: center;
     height: 30px;
-    padding: 0;
+    padding: 0 5px;
     margin: 0 5px;
     font-size: 12px;
     font-weight: 400;
     line-height: 16px;
+    border: 1px solid #ff8989;
     border-radius: 20px;
     cursor: pointer; }
     .sort__item:hover {
       color: #1f4ba5; }
+    .sort__item#sort3 {
+      margin: 0;
+      border: 1px solid #ff8989;
+      box-sizing: border-box;
+      background: 0 0;
+      line-height: 1;
+      color: #333; }
+      .sort__item#sort3:hover {
+        border: 1px solid #1f4ba5; }
 
 .hide {
   position: absolute;
@@ -853,7 +873,7 @@ span {
     text-transform: uppercase;
     letter-spacing: 1.4px; }
   .accordion__body {
-    padding: 0 30px 25px; }
+    padding: 0 20px 25px; }
 
 .btn__search__accordion {
   display: flex;
@@ -863,7 +883,8 @@ span {
 .check-list {
   list-style: none; }
   .check-list__item {
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+    font-size: 14px; }
   .check-list__text {
     color: #222222;
     font-size: 12px;
@@ -1258,10 +1279,9 @@ table.blueTable {
     width: 50%;
     padding-left: 20px;
     padding-right: 20px; }
-    .product__img {
-      margin: 22px 0 35px; }
     .product--horizontal .product__img, .product--horizontal .product__content, .product--horizontal .product__footer {
-      margin-right: 20px; }
+      margin-right: 20px;
+      display: inline-block; }
 
   .box-product.full .product {
     width: 50%; }

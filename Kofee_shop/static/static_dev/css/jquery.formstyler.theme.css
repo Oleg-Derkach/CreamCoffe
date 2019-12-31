@@ -14,13 +14,18 @@
 }
 .jq-checkbox {
 	border-radius: 4px;
+	width: 17px;
+	height: 16px;
+
 }
 .jq-checkbox.checked {
 	background: #222;
+	width: 17px;
+	height: 16px;
 }
 .jq-checkbox.checked .jq-checkbox__div {
-	width: 8px;
-	height: 4px;
+	width: 11px;
+	height: 5px;
 	margin: 4px 0 0 3px;
 	border-bottom: 2px solid #fff;
 	border-left: 2px solid #fff;

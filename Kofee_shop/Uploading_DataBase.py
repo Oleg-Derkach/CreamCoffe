@@ -42,6 +42,7 @@ def add_new_product_to_DB():
         item = Item()    
         item.slug = int(row[0])         
         item.title = row[2]
+        item.title_lower = row[2].lower()
         item.price = row[3] + NACENKA 
         item.pcs_or_kg = row[4]
         item.min_req = row[5]

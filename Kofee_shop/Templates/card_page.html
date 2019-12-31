@@ -17,15 +17,11 @@
       <span class="">{{ product_item.category.category_name }}</span>
     </a>
     <p class="lead">
-      {% if product_item.discount_price %}
-      <span class="mr-1">
-        <del>{{ product_item.price }} Грн / Кг </del>
+      <span>{{ product_item.price }} 
+  {% if product_item.pcs_or_kg == "PCS" %} Шт  {% else %} Кг {% endif %}
       </span>
-      <span>{{ product_item.discount_price }} Грн / Кг </span>
-      {% else %}
-      <span>{{ product_item.price }} Грн / Кг </span>
-      {% endif %}
     </p>
+    
     <p class="lead font-weight-bold">Описание</p>
     <p>{{ product_item.description }}</p>
       <a href="{{ product_item.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p">

@@ -12,7 +12,7 @@
 						<span class="icon-sliders"></span>
 						<span class="sr-only">Filters</span>
 					</button>
-					<span class="filter__title">{{ search_bar.qs.count }} items found</span>
+					<span class="filter__title">{{ items_count }} items found</span>
 				</div>
 				<div class="filter-content">
 					<span class="filter__title">Сортировать</span>
@@ -28,6 +28,11 @@
 	{% if search_filt == 'price' %} checked='' {% endif %}>
 	<label for="sort2" class="sort__item">
 	<a href="?search_filt=price">По цене</a>
+	</label>
+
+	<input type="radio" id="sort3" name="search_filt" value="reset">
+	<label for="sort3" class="sort__item" id="sort3">
+	<a href="?search=reset">Сбросить</a>
 	</label>
 						
 					</div>
@@ -115,7 +120,7 @@
 	</h6>
 
 	<div class="prod__desctipt">
-		<a href="{{ item.product.get_absolute_url }}" class="">{{ item.product.description|truncatechars:230 }}</a>
+
 	</div>
 	
 	<div class="product__img">

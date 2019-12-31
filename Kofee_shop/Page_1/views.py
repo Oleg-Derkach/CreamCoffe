@@ -10,7 +10,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from .models import Item, OrderItem, Order, ProductImage, Category, Address
 from .forms import CheckoutForm
-from .filters import ItemFilters
 from .telegram_bot import send_telegram_notification, send_email_notification
 
 
@@ -26,7 +25,7 @@ def _filter(request, cat_status):
             product_card = product_card.exclude(product__category__id=int(cat_id))
             counter += 1
     if counter == len(cat_status):
-        return ProductImage.objects.filter(is_main = True)
+        return ProductImage.objects.filter(is_main = True).filter(product__available=True)
     return product_card
             
 
@@ -43,6 +42,9 @@ def home_view(request):
                 main_filter['check_box'][str(cat.id)] = 'on'
                 main_filter['cat_on'].append(int(cat.id))
             else:
+                main_filter['check_box'][str(cat.id)] = 'off'
+            if request.GET.get('search') == 'reset': 
+                main_filter['cat_on'] = []
                 main_filter['check_box'][str(cat.id)] = 'off'
                 
     elif request.method == 'POST':
@@ -67,11 +69,18 @@ def home_view(request):
         product_card = ProductImage.objects.filter(is_main = True).filter(product__available=True)
     else:
         product_card = _filter(request, main_filter['check_box']) 
-
+    
+    if request.GET.get('search') == 'reset': 
+        main_filter['search_filt'] = 'title'
+        
+    
+    serched_slug =  request.GET.get('product__title')  
+    if serched_slug != None:
+        product_card = product_card.filter(product__title_lower__contains=serched_slug.lower())
+      
     product_card = product_card.order_by("product__" + main_filter['search_filt'])
-    search_bar = ItemFilters(request.GET, queryset=product_card)
     
-    
+
     if request.user.is_authenticated:
         try:
             order = Order.objects.get(user=request.user, ordered=False)
@@ -80,7 +89,7 @@ def home_view(request):
     else:
         order = None
          
-    paginator = Paginator(search_bar.qs, 20)
+    paginator = Paginator(product_card, 20)    # 20 Items per page
 
     if page == None:
         page = 1
@@ -89,12 +98,12 @@ def home_view(request):
 
     queryset = paginator.get_page(page)
     is_paginated = queryset.has_other_pages()
-    
+
     response = render(request, 'main_page.html', 
         {'category': all_category,       'cat_on':main_filter['cat_on'],
         'order':order,                   'search_filt':main_filter['search_filt'],
         'query_products':queryset,       'is_paginated':is_paginated,
-        'search_bar':search_bar
+        'items_count':len(product_card)
         }) 
     
     for item in main_filter['check_box']:   
@@ -134,7 +143,8 @@ class CheckoutView(View):
             if form.is_valid():
                 address = Address(
                       user =              self.request.user,
-                      first_last_name =   form.cleaned_data.get('first_last_name'),
+                      first_name =        form.cleaned_data.get('first_name'),
+                      last_name =         form.cleaned_data.get('last_name'),
                       city_region =       form.cleaned_data.get('city_region'),
                       delivery_address =  form.cleaned_data.get('delivery_address'),
                       phone =             form.cleaned_data.get('phone'),
@@ -146,8 +156,9 @@ class CheckoutView(View):
                 order.ordered = True
                 order.save()
                 messages.info(self.request, "Спасибо за заказ!")
-                txt = ' user: {}\n first_last_name: {}\n city_region: {}\n delivery_address: {}\n\
-                phone: {}\n Order: {}\n Ttl/price: {}\n comments: {}\n'.format(address.user, address.first_last_name, \
+                txt = ' user: {}\n first_name: {}\n last_name: {}\n city_region: {}\n delivery_address: {}\n\
+                phone: {}\n Order: {}\n Ttl/price: {}\n comments: {}\n'.format(address.user, \
+                address.first_name, address.last_name, \
                 address.city_region, address.delivery_address, address.phone, \
                 '\n'.join(order.ordered_items()), order.get_total() ,address.comments)
                 # send massage to manager, to confirm the order  
@@ -169,7 +180,7 @@ class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
-            context = { 'object': order }
+            context = { 'order':order }
             
             return render(self.request, 'order_summary.html', context)
         

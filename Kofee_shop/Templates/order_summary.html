@@ -18,7 +18,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for order_item in object.items.all %}
+        {% for order_item in order.items.all %}
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>
@@ -51,10 +51,10 @@
             </td>
         </tr>
         {% endfor %}
-        {% if object.get_total %}
+        {% if order.get_total %}
         <tr>
             <td colspan="5"><b> Всего </b></td>
-            <td> <b>{{ object.get_total| floatformat:"1" }} ₴ </b></td>
+            <td> <b>{{ order.get_total| floatformat:"1" }} Грн </b></td>
         </tr>
         <tr>
             <td colspan="6"> 

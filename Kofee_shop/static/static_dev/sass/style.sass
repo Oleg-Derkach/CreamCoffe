@@ -89,37 +89,67 @@ span
 /* Login  /  SignUp  /  SignIn
      ====================== */
 
-.login__page 
-	width: 350px
-	padding: 15px
-	box-shadow: 0 0 3px rgba(0, 0, 0, 0.3)
-	h1 
-		margin: 0 0 20px
-		line-height: 1
-		color: #44c4e7
-		font-size: 18px
-		font-weight: 400
-	form
-		list-style: none
-		font-size: 18px
-		input 
-			display: block
-			width: 100%
-			margin: 0 0 20px
-			padding: 10px 15px
-			border: 1px solid #ccc
-			font-size: 14px
-			&[type="checkbox"]
+.login-wrap
+	width: 100%
+	margin: 20px auto
+	max-width: 525px
+	min-height: 670px
+	position: relative
+	background: url(../img/bg.jpg) no-repeat center
+	box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19)
+  
+	.login-html
+		width: 100%
+		height: 100%
+		position: absolute
+		padding: 50px 30px 50px 30px
+		box-sizing: border-box
+		a 
+			color: cyan
+		h1 
+			color: $color
+			font-size: 30px
+			padding-bottom: 5px
+			margin: 0 15px 10px 0
+			border-bottom: 2px solid
+		p 
+			color: aliceblue
+			font-size: 17px
+		form
+			list-style: none
+			font-size: 18px
+			li 
+				padding: 10px 0
+				color: #00ff08
+
+			label
+				color: aliceblue
+			input 
+				border: none
+				padding: 15px 20px
+				border-radius: 25px
+				background: rgba(255, 255, 255, 0.1)
+				width: 100%
+				color: #fff
 				display: block
-				-webkit-appearance: checkbox
+				font-size: 20px
+
+				&[type="checkbox"]
+					display: inline
+					-webkit-appearance: checkbox
+					width: 19px
+					height: 18px
+					margin: 17px 22px
 	button 
 		cursor: pointer
 		background: #44c4e7
 		width: 100%
-		padding: 10px 15px
+		padding: 15px 15px
 		border: 0
 		color: #fff
-		font-size: 14px
+		font-size: 18px
+		border-radius: 20px
+		margin: 20px 0
 
 		&:hover 
 			background: #369cb8
@@ -147,11 +177,13 @@ span
 	z-index: 1
 	opacity: 5
 	background-color: aquamarine
+	border-radius: 20px
 	.alert
 		padding: 5px
 		font-family: $font-family
 		font-size: 14px
 		border: 1px solid black
+		border-radius: 20px
 
 		
 .header 
@@ -489,8 +521,6 @@ span
 	display: flex
 	flex-wrap: wrap
 	margin-right: -1px
-	.product__title
-		height: 30px
 
 .product 
 	position: relative
@@ -500,24 +530,7 @@ span
 	padding: 26px 30px
 	text-align: center
 	+min-screen(992px)
-		&:not(.product--horizontal):hover 
-			.product__title, .price
-				color: #fff
-			.product__footer
-				position: relative
-				z-index: 2
 
-			.product__card, .prod__desctipt 
-				z-index: 2
-				opacity: 1
-				visibility: visible
-
-			&:before 
-				height: 100%
-				width: 100%
-				left: 0
-				top: 0
-	
 	&:before
 		content: ''
 		display: block
@@ -545,15 +558,14 @@ span
 		
 	&__img 
 		position: relative
-		margin: 45px 0 60px
+		margin: 15px 0 60px
 		img 
 			object-fit: cover
 			height: 200px
 			width: 200px
+			display: inherit
 
-	&__card,  
-		opacity: 0
-		visibility: hidden
+	&__card  
 		position: absolute
 		left: -30px
 		right: -30px
@@ -561,7 +573,6 @@ span
 		text-align: center
 		bottom: -70px
 		transform: translate(0,-50%)
-		transition: all 0.4s
 
 		.btn
 			margin-left: 10px
@@ -639,7 +650,6 @@ span
 			margin-right: 30px
 		.product__footer
 			display: block
-			
 			width: 85px
 			margin-right: 20px
 			.price, .discount, .pbadge
@@ -733,15 +743,15 @@ span
 	input:checked + .sort__item
 		color: #fff
 		background-color: $color
-		padding: 0
+		padding: 0 5px
 		a 
 			display: block
-			padding: 10px
+			padding: 5px
 			text-decoration: none
 			color: #fff
 	a 
 		display: block
-		padding: 10px
+		padding: 5px
 		text-decoration: none
 		color: $color
 	&__item 
@@ -750,17 +760,26 @@ span
 		justify-content: center
 		align-items: center
 		height: 30px
-		padding: 0
+		padding: 0 5px
 		margin: 0 5px
 		font-size: 12px
 		font-weight: 400
 		line-height: 16px
+		border: 1px solid #ff8989
 		border-radius: 20px
 		cursor: pointer
 		
 		&:hover 
 			color: $color-blue
-
+		&#sort3
+			margin: 0
+			border: 1px solid #ff8989
+			box-sizing: border-box
+			background: 0 0
+			line-height: 1
+			color: #333
+			&:hover
+				border: 1px solid $color-blue
 
 .hide
 	position: absolute
@@ -817,7 +836,8 @@ span
 		letter-spacing: 1.4px
 
 	&__body 
-		padding: 0 30px 25px
+		padding: 0 20px 25px
+
 
 .btn__search__accordion
 	display: flex
@@ -828,6 +848,7 @@ span
 	list-style: none
 	&__item 
 		margin-bottom: 10px
+		font-size: 14px
 	&__text 
 		color: #222222
 		font-size: 12px
@@ -1236,13 +1257,11 @@ table.blueTable
 		width: 50%
 		padding-left: 20px
 		padding-right: 20px
-		&__img 
-			margin: 22px 0 35px
 
 		&--horizontal 
 			.product__img, .product__content, .product__footer
 				margin-right: 20px
-
+				display: inline-block
 
 	.box-product.full
 		.product 
