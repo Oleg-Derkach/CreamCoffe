@@ -66,9 +66,9 @@
 
 			{% if item.id in cat_on %}
 					checked
-			{% endif %}>
+			{% endif %} id="{{ item.id }}">
 
-			<label for="check-list1">{{ item }}</label>
+			<label for="{{ item.id }}" class="check-list__text">{{ item }}</label>
 		</li>
 	{% endfor  %}
 							</ul>

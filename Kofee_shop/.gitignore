@@ -1,5 +1,5 @@
 
-Deployment/Kofee_shop_nginx.conf.save
+Deployment/
 Kofee_shop/settings.py
 Kofee_shop/__pycache__/
 Deployment/uwsgi_err.log

@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-Прессованный медаль зеленый  ,Вес: 1.5 ,1251.75
-
 {% block content %}
 <div class="table-responsive">
     <h2>Заказ</h2>
@@ -30,15 +28,23 @@
             <td>{{ order_item.product_item.min_req| floatformat:"2" }}</td>
 
             <td>
-                <a href=" {% url 'page_1:remove_single_item_from_cart' order_item.product_item.slug %}"><i class="fa fa-minus" aria-hidden="true" ></i></a> 
+                <div class="td_center">
+                <a href=" {% url 'page_1:remove_single_item_from_cart' order_item.product_item.slug %}">
+                    <img src="{% static 'img/minus.png' %}" class="order_plus_minus"></a> 
                    {{ order_item.get_total_quantity| floatformat:"2" }}
-                <a href=" {% url 'page_1:add_to_cart' order_item.product_item.slug %}"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                <a href=" {% url 'page_1:add_to_cart' order_item.product_item.slug %}">
+                    <img src="{% static 'img/plus.png' %}" class="order_plus_minus"></a>
+                </div>
             </td>
             <td>
+                <div class="td_center">
                 {{ order_item.get_final_price| floatformat:"2" }} Грн
-            <a href=" {% url 'page_1:remove_from_cart' order_item.product_item.slug %}">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-            </a>
+                <div style="width: 20px; height: 20px;">   
+                <a href=" {% url 'page_1:remove_from_cart' order_item.product_item.slug %}">
+                <img src="{% static 'img/trash.png' %}" class="order_plus_minus">
+                </a></div>
+            
+            </div>
             </td>
         </tr>
         {% empty %}

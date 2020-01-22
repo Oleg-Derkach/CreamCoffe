@@ -7,11 +7,11 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 from .models import Item, OrderItem, Order, ProductImage, Category, Address
 from .forms import CheckoutForm
 from .telegram_bot import send_telegram_notification, send_email_notification
-
+from django.contrib.auth.models import User
 
 
 
@@ -29,12 +29,26 @@ def _filter(request, cat_status):
     return product_card
             
 
+def authenticate_anonymous_user(request):
+    if request.session.session_key:    
+        ses_key = request.session.session_key
+    else:         
+        request.session.cycle_key()
+        ses_key = request.session.session_key
+        User.objects.create_user(username = ses_key, password=ses_key)
+    if not request.user.is_authenticated:
+        user = authenticate(request, username=ses_key, password=ses_key)
+        if user is not None:
+            login(request, user) 
+            
+
 def home_view(request):
-    
+        
     all_category = [cat for cat in Category.objects.all()]
     main_filter = {'check_box':{}, 'search_filt':'', 'cat_on':[]}
     off_status_of_check_box = 0
     page = request.GET.get('page', request.COOKIES.get('page'))
+    alone_category = request.GET.get('alone_category')  
     
     if request.method == 'GET':
         for cat in all_category:
@@ -43,10 +57,13 @@ def home_view(request):
                 main_filter['cat_on'].append(int(cat.id))
             else:
                 main_filter['check_box'][str(cat.id)] = 'off'
-            if request.GET.get('search') == 'reset': 
+            if request.GET.get('search') == 'reset':
                 main_filter['cat_on'] = []
                 main_filter['check_box'][str(cat.id)] = 'off'
-                
+        if alone_category:
+            main_filter['cat_on'].append(int(alone_category))
+            main_filter['check_box'][str(alone_category)] = 'on'
+   
     elif request.method == 'POST':
         page = 1
         for cat in all_category:
@@ -87,7 +104,8 @@ def home_view(request):
         except ObjectDoesNotExist:
             order = Order.objects.create(user=request.user, ordered=False, ordered_date=timezone.now())
     else:
-        order = None
+        authenticate_anonymous_user(request)
+        order = Order.objects.create(user=request.user, ordered=False, ordered_date=timezone.now())
          
     paginator = Paginator(product_card, 20)    # 20 Items per page
 
@@ -180,7 +198,8 @@ class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
-            context = { 'order':order }
+            all_category = [cat for cat in Category.objects.all()]
+            context = {'order':order, 'category': all_category}
             
             return render(self.request, 'order_summary.html', context)
         

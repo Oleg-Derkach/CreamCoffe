@@ -250,17 +250,17 @@ span {
     border-radius: 20px; }
 
 .header {
-  height: 80px;
+  height: 78px;
   background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30px;
+  padding: 0 30px 0 17px;
   border-bottom: 1px solid #ececec; }
 
 .logo {
-  margin-right: 38px;
-  padding-bottom: 7px; }
+  width: 150px;
+  margin-right: 38px; }
 
 .main-menu {
   list-style: none;
@@ -611,7 +611,8 @@ span {
     color: #222;
     font-size: 16px;
     font-weight: 400;
-    line-height: 16px; }
+    line-height: 16px;
+    height: 30px; }
     .product__title a {
       color: inherit; }
       .product__title a:hover {
@@ -806,7 +807,7 @@ span {
     font-size: 12px;
     font-weight: 400;
     line-height: 16px;
-    border: 1px solid #ff8989;
+    border: 1px solid #4a89dc;
     border-radius: 20px;
     cursor: pointer; }
     .sort__item:hover {
@@ -887,7 +888,7 @@ span {
     font-size: 14px; }
   .check-list__text {
     color: #222222;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 18px;
     cursor: pointer; }
@@ -1036,6 +1037,13 @@ span {
 
 /* Product basket
  * ====================== */
+.order_plus_minus {
+  width: 18px; }
+
+.td_center {
+  display: flex;
+  align-items: center; }
+
 table.blueTable {
   border: 1px solid #1C6EA4;
   background-color: #EEEEEE;
@@ -1115,12 +1123,12 @@ table.blueTable {
     border: none;
     padding: 0;
     background-color: transparent;
-    margin-right: 35px;
-    font-size: 18px; }
+    font-size: 18px;
+    margin-right: 20px; }
 
   .dropdown-content__item {
     padding: 30px;
-    width: 25%; }
+    width: 100%; }
     .dropdown-content__item:not(:last-child) {
       border-right: 1px solid #353535; }
   .dropdown-content__title {
@@ -1142,13 +1150,14 @@ table.blueTable {
       left: 0px;
       visibility: visible; }
     .dropdown-content--menu:before {
-      left: 30px; }
+      left: 20px; }
 
   .logo, .main-menu, .search, .location {
-    margin-right: 40px; }
+    margin-right: 20px; }
 
   .dropdown-menu + .dropdown-content__title {
-    margin-top: 45px; }
+    margin-top: 45px;
+    width: 50px; }
 
   .hr {
     height: 1px;
@@ -1216,12 +1225,14 @@ table.blueTable {
     display: none; } }
 @media screen and (max-width: 767px) {
   .header {
-    padding-left: 20px;
+    padding-left: 17px;
     padding-right: 20px;
-    height: 65px; }
+    height: 78px; }
 
   .toggle-menu, .logo, .main-menu, .location {
-    margin-right: 25px; }
+    margin-right: 25px;
+    width: auto;
+    margin-top: 5px; }
 
   .search {
     margin-right: 15px; }
